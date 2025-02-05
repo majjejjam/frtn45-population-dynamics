@@ -2,28 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy
 
-#General RK4 method
-def rk4(f, told, uold, h):
-  c = np.array([0, 1/2, 1/2, 1])
-  A = np.array([[0, 0, 0, 0],
-                [1/2, 0, 0, 0],
-                [0, 1/2, 0, 0],
-                [0, 0, 1, 0]])
-  b = np.array([1/6, 1/3, 1/3, 1/6])
-
-  stage_derivatives = []
-  for i in range(4):
-    if i == 0:
-      stage_derivatives.append(f(told, uold))
-    else:
-      stage_derivatives.append(f(told + c[i]*h, uold + h*A[i,i-1]*stage_derivatives[i-1]))
-
-  unew = uold
-  for i in range(4):
-    unew += h*b[i]*stage_derivatives[i]
-
-  return unew
-
 #RK34 method
 def rk34(f, told, uold, h):
   c = np.array([0, 1/2, 1/2, 1])
