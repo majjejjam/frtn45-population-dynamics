@@ -89,6 +89,15 @@ def lotka_volterra(t, u):
 
     return np.array([dxdt, dydt])
 
+def lotka_volterra_fishermen(t, u):
+    x, y = u
+    a, b, c, d, e = 3, 9, 15, 15, 15
+
+    dxdt = a * x - b * x * y
+    dydt = c * x * y - d * y - e * y * y
+
+    return np.array([dxdt, dydt])
+
 
 # Initial conditions
 t0 = 0
