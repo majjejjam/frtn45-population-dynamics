@@ -89,11 +89,14 @@ def lotka_volterra(t, u):
 
     return np.array([dxdt, dydt])
 
-def lotka_volterra_fishermen(t, u):
+# Prey cannot grow indefinitely: logistic growth
+# Predators are repelled by their peers: quadratic term
+def fishermen_fish(t, u):
     x, y = u
     a, b, c, d, e = 3, 9, 15, 15, 15
+    K = 500
 
-    dxdt = a * x - b * x * y
+    dxdt = (a * x * (K - x)) / K - b * x * y
     dydt = c * x * y - d * y - e * y * y
 
     return np.array([dxdt, dydt])
@@ -107,7 +110,7 @@ y0 = np.array([2, 1], dtype=np.float64)  # Ensure the initial condition is float
 tol = 1e-6  # Tolerance
 
 # Run adaptive RK34 solver
-t_vec, u_vec = adaptiveRK34(lotka_volterra, t0, tf, y0, tol)
+t_vec, u_vec = adaptiveRK34(fishermen_fish, t0, tf, y0, tol)
 
 # Extract solutions
 u_vec = np.array(u_vec)
@@ -132,9 +135,9 @@ print("This is x1,y1: ", x[1], " ", y[1])
 X = np.linspace(0, 4, 20)
 Y = np.linspace(0, 4, 20)
 U,V = np.meshgrid(X, Y)
-u, v = lotka_volterra(0, np.array([U, V]))
+u, v = fishermen_fish(0, np.array([U, V]))
 
-dxdt, dydt = lotka_volterra(0, np.array([X, Y]))
+dxdt, dydt = fishermen_fish(0, np.array([X, Y]))
 plt.figure(figsize=(10, 6))
 plt.streamplot(U,V,u,v)
 plt.plot(x, y, color="green")
@@ -154,7 +157,7 @@ y0 = np.array([2, 1], dtype=np.float64)  # Ensure the initial condition is float
 tol = 1e-8  # Tolerance
 
 # Run adaptive RK34 solver
-t_vec, u_vec = adaptiveRK34(lotka_volterra, t0, tf, y0, tol)
+t_vec, u_vec = adaptiveRK34(fishermen_fish, t0, tf, y0, tol)
 
 # Extract solutions
 u_vec = np.array(u_vec)
